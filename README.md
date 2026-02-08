@@ -130,6 +130,7 @@ Create business-consumable datasets for reporting and analytics.
 
 **AWS Glue Jobs:**  
 ![Glue Jobs](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/Glue%20jobs.png)
+![Glue Jobs](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/P4.png)
 
 **Gold Layer:**  
 ![Gold Layer](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/goldlayer.png)
