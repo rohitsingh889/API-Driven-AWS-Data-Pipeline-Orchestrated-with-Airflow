@@ -3,7 +3,7 @@
 ![Project Overview](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/complete%20pipeline.jpg)
 
 ## 📦 API → S3 Data Lake → Glue ETL → Athena Analytics
-### End-to-End Data Engineering Project
+
 ## 🔹 Short Summary
 - End-to-end AWS data engineering pipeline
 - REST API → S3 (Bronze/Silver/Gold) → Glue → Athena
