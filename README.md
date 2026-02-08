@@ -16,7 +16,8 @@ The pipeline ingests **e-commerce order data from a public REST API**, stores it
 The design follows **real-world cloud data engineering best practices**, including immutable raw storage, distributed ETL, workflow orchestration, and schema-driven analytics.
 
 **Data Source:**  
-https://fakestoreapi.com/carts
+https://fakestoreapi.com/
+
 
 ---
 
