@@ -1,5 +1,5 @@
 # API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow
-![Stocks_Logo]()
+![Logo](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/project%20desc.jpg)
 # 📦 API → S3 → AWS Glue → Athena  
 ## End-to-End Data Engineering Project
 
