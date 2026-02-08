@@ -18,17 +18,16 @@ The design follows **real-world cloud data engineering best practices**, includi
 **Data Source:**  
 https://fakestoreapi.com/
 
-
 ---
 
 ## 🏗️ High-Level Architecture
 
-- Apache Airflow (Local, Dockerized) orchestrates the pipeline
-- REST API provides raw JSON order data
-- Amazon S3 serves as the data lake (Bronze, Silver, Gold)
-- AWS Glue performs distributed ETL using PySpark
-- AWS Glue Crawler manages metadata
-- Amazon Athena enables serverless analytics
+- Apache Airflow (Local, Dockerized) orchestrates the pipeline  
+- REST API provides raw JSON order data  
+- Amazon S3 serves as the data lake (Bronze, Silver, Gold)  
+- AWS Glue performs distributed ETL using PySpark  
+- AWS Glue Crawler manages metadata  
+- Amazon Athena enables serverless analytics  
 
 ---
 
@@ -36,14 +35,14 @@ https://fakestoreapi.com/
 
 ### 1️⃣ API Ingestion – Bronze Layer
 
-- Airflow triggers a Python ingestion task
-- Raw JSON data is fetched from the external API
-- Data is stored **immutably** in Amazon S3
-- Files are partitioned by **ingestion date**
-- No transformations are applied at this stage
+- Airflow triggers a Python ingestion task  
+- Raw JSON data is fetched from the external API  
+- Data is stored **immutably** in Amazon S3  
+- Files are partitioned by **ingestion date**  
+- No transformations are applied at this stage  
 
 **Purpose:**  
-Preserve raw data exactly as received 
+Preserve raw data exactly as received
 
 **Bronze Layer (Raw Data):**
 
@@ -57,34 +56,34 @@ AWS Glue ETL jobs in this project are **programmatically triggered from Apache A
 
 ### How Glue Jobs Are Triggered
 
-- A lightweight Python utility function is used to start Glue jobs dynamically
-- The function accepts the Glue job name as a parameter
-- Airflow calls this function as part of the DAG execution
-- Glue jobs run asynchronously in AWS while Airflow continues orchestration
+- A lightweight Python utility function is used to start Glue jobs dynamically  
+- The function accepts the Glue job name as a parameter  
+- Airflow calls this function as part of the DAG execution  
+- Glue jobs run asynchronously in AWS while Airflow continues orchestration  
 
 ### Purpose of This Approach
 
-- Decouples orchestration logic from ETL logic
-- Allows the same Airflow DAG to trigger multiple Glue jobs
-- Avoids hardcoding Glue execution inside ETL scripts
-- Matches real-world, production-grade orchestration patterns
+- Decouples orchestration logic from ETL logic  
+- Allows the same Airflow DAG to trigger multiple Glue jobs  
+- Avoids hardcoding Glue execution inside ETL scripts  
+- Matches real-world, production-grade orchestration patterns  
 
 ### Key Responsibilities of the Glue Trigger Function
 
-- Establishes a connection to AWS Glue using IAM-based authentication
-- Starts a Glue job run using the provided job name
-- Logs the Glue Job Run ID for monitoring and debugging
-- Enables Airflow to orchestrate AWS-native ETL services seamlessly
+- Establishes a connection to AWS Glue using IAM-based authentication  
+- Starts a Glue job run using the provided job name  
+- Logs the Glue Job Run ID for monitoring and debugging  
+- Enables Airflow to orchestrate AWS-native ETL services seamlessly  
 
 ### Why Use boto3 for Glue Job Execution
 
-- Native AWS SDK for Python
-- Secure IAM role-based access (no credentials in code)
-- Fully compatible with Airflow PythonOperators
-
+- Native AWS SDK for Python  
+- Secure IAM role-based access (no credentials in code)  
+- Fully compatible with Airflow PythonOperators  
 
 ### End-to-End Flow with Glue Job Triggering
-   Airflow DAG
+
+Airflow DAG
 ↓
 PythonOperator
 ↓
@@ -96,19 +95,18 @@ Processed Data Written to S3
 
 
 This approach ensures **clear separation of concerns**, where:
-- **Airflow** handles orchestration and scheduling
-- **AWS Glue** handles distributed data processing
-- **boto3** acts as the integration layer between them
+- **Airflow** handles orchestration and scheduling  
+- **AWS Glue** handles distributed data processing  
+- **boto3** acts as the integration layer between them  
 
-
-
+---
 
 ### 2️⃣ Raw → Silver Transformation
 
-- AWS Glue reads raw JSON data from S3
-- Schema is inferred and normalized
-- Data is converted to **Parquet format**
-- Output is written to the **Silver zone**
+- AWS Glue reads raw JSON data from S3  
+- Schema is inferred and normalized  
+- Data is converted to **Parquet format**  
+- Output is written to the **Silver zone**  
 
 **Purpose:**  
 Improve performance, enforce structure, and optimize storage.
@@ -121,50 +119,47 @@ Improve performance, enforce structure, and optimize storage.
 
 ### 3️⃣ Silver → Gold Transformation
 
-- AWS Glue transforms Silver data into an analytics-ready fact table
-- Nested product arrays are exploded
-- Data is normalized to **order-line level**
-- Partition columns (year, month) are added
-- Output is written to the **Gold zone**
+- AWS Glue transforms Silver data into an analytics-ready fact table  
+- Nested product arrays are exploded  
+- Data is normalized to **order-line level**  
+- Partition columns (year, month) are added  
+- Output is written to the **Gold zone**  
 
 **Purpose:**  
 Create business-consumable datasets for reporting and analytics.
 
+**AWS Glue Jobs:**  
+![Glue Jobs](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/Glue%20jobs.png)
 
-
-**AWS Glue Jobs:**
-![Gold Layer](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/Glue%20jobs.png)
-
-**Gold Layer:**
+**Gold Layer:**  
 ![Gold Layer](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/goldlayer.png)
 
 ---
 
 ### 4️⃣ Metadata Management
 
-- AWS Glue Crawler scans the Gold zone
-- Table schema is registered in the Glue Data Catalog
-- Athena automatically detects the table
+- AWS Glue Crawler scans the Gold zone  
+- Table schema is registered in the Glue Data Catalog  
+- Athena automatically detects the table  
 
 **Purpose:**  
 Enable SQL analytics without manual schema management.
 
-**AWS Glue Crawler:**
-
+**AWS Glue Crawler:**  
 ![Glue Crawler](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/crawler.png)
 
 ---
 
 ### 5️⃣ Analytics & Querying
 
-- Amazon Athena queries the Gold table
-- Supports aggregations, trends, and data quality checks
-- Partition pruning improves query performance
-- No infrastructure provisioning required
+- Amazon Athena queries the Gold table  
+- Supports aggregations, trends, and data quality checks  
+- Partition pruning improves query performance  
+- No infrastructure provisioning required  
 
 **Amazon Athena Queries:**
 
-![Athena Query 1](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/p2.png)
+![Athena Query 1](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/p2.png)  
 ![Athena Query 2](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/p1.png)
 
 ---
@@ -189,16 +184,16 @@ Enable SQL analytics without manual schema management.
 **boto3** is used to programmatically interact with AWS services.
 
 ### Where boto3 is used
-- Upload raw API data to Amazon S3
-- Trigger AWS Glue ETL jobs
-- Start AWS Glue Crawlers
-- Authenticate securely using IAM roles
+- Upload raw API data to Amazon S3  
+- Trigger AWS Glue ETL jobs  
+- Start AWS Glue Crawlers  
+- Authenticate securely using IAM roles  
 
 ### Why boto3
-- Native AWS SDK for Python
-- Secure, role-based authentication
-- Enables full automation from Airflow
-- Industry standard for AWS-backed pipelines
+- Native AWS SDK for Python  
+- Secure, role-based authentication  
+- Enables full automation from Airflow  
+- Industry standard for AWS-backed pipelines  
 
 ---
 
@@ -207,16 +202,16 @@ Enable SQL analytics without manual schema management.
 The **AWS Command Line Interface (CLI)** is used during development and operations.
 
 ### AWS CLI is used for
-- Verifying data in S3 buckets
-- Running and debugging Glue jobs
-- Managing Glue Crawlers
-- Validating IAM permissions
-- Troubleshooting access and connectivity
+- Verifying data in S3 buckets  
+- Running and debugging Glue jobs  
+- Managing Glue Crawlers  
+- Validating IAM permissions  
+- Troubleshooting access and connectivity  
 
 ### Benefits
-- Fast local validation
-- No dependency on AWS Console
-- Matches real-world production workflows
+- Fast local validation  
+- No dependency on AWS Console  
+- Matches real-world production workflows  
 
 ---
 
@@ -224,119 +219,90 @@ The **AWS Command Line Interface (CLI)** is used during development and operatio
 
 Apache Airflow is deployed **locally using Docker**, simulating a production orchestration environment.
 
-![Airflow Details](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/airflow%20details.png)
+![Airflow Details](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/airflow%20details.png)  
 ![Airflow Status](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/airflowstatus.png)
 
-**Airflow Graph View:**
-
+**Airflow Graph View:**  
 ![Airflow Graph](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/airflow%20graph.png)
 
-**Airflow Gantt Chart:**
-
+**Airflow Gantt Chart:**  
 ![Airflow Gantt](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/airflow%20gantt%20chart.png)
 
 ### Airflow responsibilities
-- Schedule the pipeline (daily)
-- Manage task dependencies
-- Retry failed tasks automatically
-- Orchestrate AWS services using boto3
-- Provide monitoring and observability
+- Schedule the pipeline (daily)  
+- Manage task dependencies  
+- Retry failed tasks automatically  
+- Orchestrate AWS services using boto3  
+- Provide monitoring and observability  
 
 ### Why local Airflow
-- Cost-effective development
-- Easy setup and debugging
-- Mirrors managed Airflow services (MWAA)
-- Ideal for portfolio and interview projects
+- Cost-effective development  
+- Easy setup and debugging  
+- Mirrors managed Airflow services (MWAA)  
+- Ideal for portfolio and interview projects  
 
 ---
 
 ## 🔐 Security & Authentication
 
-- IAM roles are used for all AWS access
-- No AWS credentials are hardcoded
-- boto3 and AWS CLI rely on role-based authentication
-- Follows AWS security best practices
+- IAM roles are used for all AWS access  
+- No AWS credentials are hardcoded  
+- boto3 and AWS CLI rely on role-based authentication  
+- Follows AWS security best practices  
 
 ---
 
 ## 📊 Analytics Capabilities
 
 The Gold table supports:
-- Order and sales trends
-- User behavior analysis
-- Product performance metrics
-- Repeat customer analysis
-- Data quality validation
-- Partition-optimized queries
+- Order and sales trends  
+- User behavior analysis  
+- Product performance metrics  
+- Repeat customer analysis  
+- Data quality validation  
+- Partition-optimized queries  
 
 ---
 
 ## 🚀 Key Data Engineering Concepts Demonstrated
 
-- REST API ingestion
-- Cloud-native data lake architecture
-- Bronze / Silver / Gold layers
-- Distributed ETL with Spark
-- Workflow orchestration
-- Partitioned analytics tables
-- Metadata-driven querying
-- Production-style SQL analytics
+- REST API ingestion  
+- Cloud-native data lake architecture  
+- Bronze / Silver / Gold layers  
+- Distributed ETL with Spark  
+- Workflow orchestration  
+- Partitioned analytics tables  
+- Metadata-driven querying  
+- Production-style SQL analytics  
 
 ---
 
 ## 🎯 Future Enhancements
 
-- Incremental ingestion
-- Data quality checks (Great Expectations)
-- Airflow sensors for Glue job monitoring
-- BI dashboards (Amazon QuickSight)
-- Infrastructure as Code (Terraform)
-- CI/CD for DAG deployments
+- Incremental ingestion  
+- Data quality checks (Great Expectations)  
+- Airflow sensors for Glue job monitoring  
+- BI dashboards (Amazon QuickSight)  
+- Infrastructure as Code (Terraform)  
+- CI/CD for DAG deployments  
 
 ---
 
-###  Summary
+### Summary
 
 This project showcases a **complete, production-style Airflow-orchestrated data lake pipeline** built on **AWS services**, ingesting e-commerce order data from a public REST API and transforming it into an analytics-ready dataset:
 
-- **Extract:** Fetch raw order data from an external REST API (FakeStore API).  
-- **Load (Bronze):** Store raw JSON data immutably in Amazon S3, partitioned by ingestion date.  
-- **Transform (Silver):** Use AWS Glue to convert raw JSON into optimized Parquet format for efficient processing.  
-- **Transform (Gold):** Apply business transformations using AWS Glue (PySpark), normalize nested structures, and create an order-line–level fact table.  
-- **Orchestrate:** Apache Airflow (running locally in Docker) manages the end-to-end workflow, task dependencies, retries, and scheduling.  
-- **Catalog & Query:** AWS Glue Crawler infers schema and partitions automatically, enabling serverless SQL analytics through Amazon Athena.  
-- **Analytics-Ready:** Supports trend analysis, aggregations, data quality checks, and partition-pruned queries.  
-- **Scalable & Reusable:** Modular design allows easy extension to new APIs, datasets, or additional transformations.  
-- **Portfolio-Ready:** Demonstrates a real-world, cloud-native data engineering pipeline following Bronze–Silver–Gold best practices.
+- **Extract:** Fetch raw order data from an external REST API (FakeStore API)  
+- **Load (Bronze):** Store raw JSON data immutably in Amazon S3, partitioned by ingestion date  
+- **Transform (Silver):** Use AWS Glue to convert raw JSON into optimized Parquet format  
+- **Transform (Gold):** Apply business transformations using AWS Glue (PySpark)  
+- **Orchestrate:** Apache Airflow manages scheduling, retries, and dependencies  
+- **Catalog & Query:** AWS Glue Crawler enables serverless SQL analytics via Athena  
+- **Analytics-Ready:** Supports trends, aggregations, and data quality checks  
+- **Scalable & Reusable:** Modular and extensible design  
+- **Portfolio-Ready:** Follows real-world Bronze–Silver–Gold best practices  
 
 ---
-## 🔮 Future Enhancements
-
-The following enhancements can be added to evolve this project into a fully production-grade data platform:
-
-- **Incremental & CDC Ingestion**  
-  Implement incremental loads using ingestion timestamps or change data capture (CDC) patterns to avoid full reprocessing and reduce cost.
-
-- **Data Quality & Validation**  
-  Integrate data quality checks using tools like Great Expectations to validate schema, nulls, duplicates, and business rules at each layer.
-
-- **Airflow Sensors & Glue Job Monitoring**  
-  Add Airflow Glue job sensors to monitor job completion and failures instead of fire-and-forget execution.
-
-
-- **Metadata & Lineage Tracking**  
-  Integrate data lineage and metadata tracking to improve observability and governance across the pipeline.
-
-- **CI/CD for Airflow DAGs**  
-  Add automated testing and CI/CD pipelines for DAG deployment and validation.
-
-- **Infrastructure as Code (IaC)**  
-  Provision AWS resources using Terraform or CloudFormation for repeatable and auditable infrastructure setup.
-
-- **Advanced Analytics & Machine Learning**  
-  Extend the Gold layer to support predictive analytics such as demand forecasting, customer segmentation, or recommendation models.
-
-
 
 ## 👨‍💻 Author & Project Context
 
@@ -345,13 +311,13 @@ The following enhancements can be added to evolve this project into a fully prod
 This project is part of my professional portfolio and demonstrates a **production-grade cloud data engineering pipeline** using **Apache Airflow and AWS**.
 
 Key skills reflected:
-- Workflow orchestration with Apache Airflow (local, Dockerized)
-- REST API ingestion and immutable data lake design
-- AWS Glue–based distributed ETL using PySpark
-- Schema inference and partition management with Glue Crawlers
-- Serverless analytics using Amazon Athena
-- Secure, IAM-based AWS integration using boto3 and AWS CLI
-- End-to-end pipeline automation and monitoring
+- Workflow orchestration with Apache Airflow (local, Dockerized)  
+- REST API ingestion and immutable data lake design  
+- AWS Glue–based distributed ETL using PySpark  
+- Schema inference and partition management with Glue Crawlers  
+- Serverless analytics using Amazon Athena  
+- Secure, IAM-based AWS integration using boto3 and AWS CLI  
+- End-to-end pipeline automation and monitoring  
 
-📬 **LinkedIn:** [Connect with me professionally](https://www.linkedin.com/in/rohit-raj-singh-3030172a4?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)
-
+📬 **LinkedIn:**  
+[Connect with me professionally](https://www.linkedin.com/in/rohit-raj-singh-3030172a4?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)
