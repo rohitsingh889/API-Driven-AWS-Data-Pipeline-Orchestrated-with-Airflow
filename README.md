@@ -280,9 +280,9 @@ The Gold table supports:
 ## 🎯 Future Enhancements
 
 - Incremental ingestion  
-- Data quality checks (Great Expectations)  
+- Data quality checks 
 - Airflow sensors for Glue job monitoring  
-- BI dashboards (Amazon QuickSight)  
+- BI dashboards   
 - Infrastructure as Code (Terraform)  
 - CI/CD for DAG deployments  
 
@@ -300,7 +300,9 @@ This project showcases a **complete, production-style Airflow-orchestrated data 
 - **Catalog & Query:** AWS Glue Crawler enables serverless SQL analytics via Athena  
 - **Analytics-Ready:** Supports trends, aggregations, and data quality checks  
 - **Scalable & Reusable:** Modular and extensible design  
-- **Portfolio-Ready:** Follows real-world Bronze–Silver–Gold best practices  
+- **Portfolio-Ready:** Follows real-world Bronze–Silver–Gold best practices
+
+- ![Silver Layer](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/project%20desc.jpg)
 
 ---
 
