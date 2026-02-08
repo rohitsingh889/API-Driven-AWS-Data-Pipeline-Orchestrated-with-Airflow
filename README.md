@@ -238,7 +238,36 @@ The Gold table supports:
 
 ---
 
-## 👤 Author
+###  Summary
 
-**Rohit**  
-Data Engineer
+This project showcases a **complete, production-style Airflow-orchestrated data lake pipeline** built on **AWS services**, ingesting e-commerce order data from a public REST API and transforming it into an analytics-ready dataset:
+
+- **Extract:** Fetch raw order data from an external REST API (FakeStore API).  
+- **Load (Bronze):** Store raw JSON data immutably in Amazon S3, partitioned by ingestion date.  
+- **Transform (Silver):** Use AWS Glue to convert raw JSON into optimized Parquet format for efficient processing.  
+- **Transform (Gold):** Apply business transformations using AWS Glue (PySpark), normalize nested structures, and create an order-line–level fact table.  
+- **Orchestrate:** Apache Airflow (running locally in Docker) manages the end-to-end workflow, task dependencies, retries, and scheduling.  
+- **Catalog & Query:** AWS Glue Crawler infers schema and partitions automatically, enabling serverless SQL analytics through Amazon Athena.  
+- **Analytics-Ready:** Supports trend analysis, aggregations, data quality checks, and partition-pruned queries.  
+- **Scalable & Reusable:** Modular design allows easy extension to new APIs, datasets, or additional transformations.  
+- **Portfolio-Ready:** Demonstrates a real-world, cloud-native data engineering pipeline following Bronze–Silver–Gold best practices.
+
+---
+
+## 👨‍💻 Author & Project Context
+
+**Rohit Raj Singh**
+
+This project is part of my professional portfolio and demonstrates a **production-grade cloud data engineering pipeline** using **Apache Airflow and AWS**.
+
+Key skills reflected:
+- Workflow orchestration with Apache Airflow (local, Dockerized)
+- REST API ingestion and immutable data lake design
+- AWS Glue–based distributed ETL using PySpark
+- Schema inference and partition management with Glue Crawlers
+- Serverless analytics using Amazon Athena
+- Secure, IAM-based AWS integration using boto3 and AWS CLI
+- End-to-end pipeline automation and monitoring
+
+📬 **LinkedIn:** [Connect with me professionally](https://www.linkedin.com/in/rohit-raj-singh-3030172a4?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)
+
