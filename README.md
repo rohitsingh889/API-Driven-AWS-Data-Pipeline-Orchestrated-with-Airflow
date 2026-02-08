@@ -84,13 +84,13 @@ AWS Glue ETL jobs in this project are **programmatically triggered from Apache A
 ### End-to-End Flow with Glue Job Triggering
 
 Airflow DAG
-↓
+    ↓
 PythonOperator
-↓
+    ↓
 boto3 Glue Client
-↓
+    ↓
 AWS Glue Job Execution
-↓
+    ↓
 Processed Data Written to S3
 
 
