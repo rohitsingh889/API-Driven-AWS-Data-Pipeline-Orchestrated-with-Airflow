@@ -337,7 +337,7 @@ The Gold table supports:
 
 ## 🎯 Future Enhancements
 
-- Incremental ingestion[Enhanacement Completed]
+- Incremental ingestion[Enhancement Completed]
 - Data quality checks 
 - Airflow sensors for Glue job monitoring  
 - BI dashboards   
