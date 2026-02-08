@@ -42,7 +42,3 @@ def ingest_orders_to_s3():
 
     print(f"Uploaded raw data to s3://{BUCKET_NAME}/{s3_key}")
 
-'''
-“This script performs raw data ingestion by fetching JSON data from an
-external API and storing it immutably in an S3 raw zone, partitioned by ingestion date. 
-It relies on IAM-based authentication via boto3 and is designed to be orchestrated later using Airflow.”'''
