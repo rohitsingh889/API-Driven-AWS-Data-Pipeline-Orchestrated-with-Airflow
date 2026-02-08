@@ -238,8 +238,8 @@ Apache Airflow is deployed **locally using Docker**, simulating a production orc
 ### Why local Airflow
 - Cost-effective development  
 - Easy setup and debugging  
-- Mirrors managed Airflow services (MWAA)  
-- Ideal for portfolio and interview projects  
+- Alternative of  managed Airflow services (MWAA)  
+
 
 ---
 
