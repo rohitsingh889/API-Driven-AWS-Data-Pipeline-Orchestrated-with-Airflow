@@ -51,6 +51,58 @@ Preserve raw data exactly as received
 
 ---
 
+## ⚙️ AWS Glue Job Triggering via boto3
+
+AWS Glue ETL jobs in this project are **programmatically triggered from Apache Airflow** using the **boto3 AWS SDK** instead of manual execution.
+
+### How Glue Jobs Are Triggered
+
+- A lightweight Python utility function is used to start Glue jobs dynamically
+- The function accepts the Glue job name as a parameter
+- Airflow calls this function as part of the DAG execution
+- Glue jobs run asynchronously in AWS while Airflow continues orchestration
+
+### Purpose of This Approach
+
+- Decouples orchestration logic from ETL logic
+- Allows the same Airflow DAG to trigger multiple Glue jobs
+- Avoids hardcoding Glue execution inside ETL scripts
+- Matches real-world, production-grade orchestration patterns
+
+### Key Responsibilities of the Glue Trigger Function
+
+- Establishes a connection to AWS Glue using IAM-based authentication
+- Starts a Glue job run using the provided job name
+- Logs the Glue Job Run ID for monitoring and debugging
+- Enables Airflow to orchestrate AWS-native ETL services seamlessly
+
+### Why Use boto3 for Glue Job Execution
+
+- Native AWS SDK for Python
+- Secure IAM role-based access (no credentials in code)
+- Fully compatible with Airflow PythonOperators
+
+
+### End-to-End Flow with Glue Job Triggering
+   Airflow DAG
+↓
+PythonOperator
+↓
+boto3 Glue Client
+↓
+AWS Glue Job Execution
+↓
+Processed Data Written to S3
+
+
+This approach ensures **clear separation of concerns**, where:
+- **Airflow** handles orchestration and scheduling
+- **AWS Glue** handles distributed data processing
+- **boto3** acts as the integration layer between them
+
+
+
+
 ### 2️⃣ Raw → Silver Transformation
 
 - AWS Glue reads raw JSON data from S3
