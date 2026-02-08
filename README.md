@@ -2,7 +2,7 @@
 
 ![Project Overview](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/complete%20pipeline.jpg)
 
-## 📦 API → S3 → AWS Glue → Athena  
+## 📦 API → S3 Data Lake → Glue ETL → Athena Analytics
 ### End-to-End Data Engineering Project
 
 ---
@@ -233,7 +233,15 @@ Apache Airflow is deployed **locally using Docker**, simulating a production orc
 - Manage task dependencies  
 - Retry failed tasks automatically  
 - Orchestrate AWS services using boto3  
-- Provide monitoring and observability  
+- Provide monitoring and observability
+
+## ❌ Failure Handling & Reliability
+
+- Airflow retries transient failures automatically
+- API failures result in task retries without partial writes
+- Raw data ingestion is idempotent and date-partitioned
+- Glue jobs are decoupled and can be re-run independently
+
 
 ### Why local Airflow
 - Cost-effective development  
@@ -245,7 +253,9 @@ Apache Airflow is deployed **locally using Docker**, simulating a production orc
 
 ## 🔐 Security & Authentication
 
-- IAM roles are used for all AWS access  
+
+- IAM-based authentication is used for all AWS access.
+- In local development, credentials are injected securely via environment variables, mirroring role-based access used in production environments
 - No AWS credentials are hardcoded  
 - boto3 and AWS CLI rely on role-based authentication  
 - Follows AWS security best practices  
