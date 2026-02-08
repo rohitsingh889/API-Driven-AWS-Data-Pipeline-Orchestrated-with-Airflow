@@ -243,6 +243,44 @@ Apache Airflow is deployed **locally using Docker**, simulating a production orc
 - Raw data ingestion is idempotent and date-partitioned
 - Glue jobs are decoupled and can be re-run independently
 
+## 📁 Airflow Code Organization
+
+All Airflow-related Python files are placed within the **same Airflow DAG configuration directory** to ensure proper import resolution and smooth execution inside the Dockerized Airflow environment.
+
+### Files Included
+
+- **`api_ingestion.py`**  
+  Contains the core business logic for API ingestion.  
+  This module:
+  - Fetches raw data from the external REST API  
+  - Writes immutable, date-partitioned JSON data to the S3 Bronze layer  
+  - Is designed to be reusable and callable by Airflow operators  
+
+- **`glue_job_trigger.py`**  
+  Contains utility functions for triggering AWS Glue jobs programmatically using `boto3`.  
+  This module:
+  - Starts Glue ETL jobs by job name  
+  - Enables Airflow to orchestrate Glue without embedding orchestration logic inside ETL scripts  
+  - Supports clean separation between orchestration and transformation layers  
+
+- **`api_ingestion_dag.py`**  
+  Defines the Apache Airflow DAG.  
+  This file:
+  - Schedules and orchestrates the end-to-end pipeline  
+  - Calls functions from `api_ingestion.py` and `glue_trigger.py` using PythonOperators  
+  - Manages task dependencies, retries, and execution order  
+
+### Why All Files Are in the Same Airflow Directory
+
+- Airflow automatically adds the DAG directory to its Python path  
+- Keeping related modules in the same location avoids import issues inside Docker containers  
+
+
+This organization ensures:
+- Clean separation of concerns  
+- Reusability of ingestion and orchestration logic  
+- Reliable DAG parsing and execution in a Dockerized Airflow environment  
+
 
 ### Why local Airflow
 - Cost-effective development  
