@@ -4,6 +4,11 @@
 
 ## 📦 API → S3 Data Lake → Glue ETL → Athena Analytics
 ### End-to-End Data Engineering Project
+## 🔹 Short Summary
+- End-to-end AWS data engineering pipeline
+- REST API → S3 (Bronze/Silver/Gold) → Glue → Athena
+- Orchestrated using Apache Airflow (Dockerized)
+- Incremental, idempotent, production-style design
 
 ---
 
