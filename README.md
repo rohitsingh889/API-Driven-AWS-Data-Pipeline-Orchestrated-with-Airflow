@@ -77,8 +77,12 @@ Improve performance, enforce structure, and optimize storage.
 **Purpose:**  
 Create business-consumable datasets for reporting and analytics.
 
-**Gold Layer:**
 
+
+**AWS Glue Jobs:**
+![Gold Layer](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/Glue%20jobs.png)
+
+**Gold Layer:**
 ![Gold Layer](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/goldlayer.png)
 
 ---
