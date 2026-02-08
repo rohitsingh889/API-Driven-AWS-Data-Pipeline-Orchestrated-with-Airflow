@@ -252,6 +252,15 @@ Apache Airflow is deployed **locally using Docker**, simulating a production orc
 
 ---
 
+## 🎯 Enhancements Implemented
+
+- Incremental data ingestion and processing using Airflow execution dates  
+- Raw data partitioned by ingestion date to avoid full reloads  
+- Incremental Glue jobs processing only new data per run  
+- Safe re-runs without reprocessing historical data  
+
+
+
 ## 🔐 Security & Authentication
 
 
@@ -290,7 +299,7 @@ The Gold table supports:
 
 ## 🎯 Future Enhancements
 
-- Incremental ingestion  
+- Incremental ingestion[Enhanacement Completed]
 - Data quality checks 
 - Airflow sensors for Glue job monitoring  
 - BI dashboards   
