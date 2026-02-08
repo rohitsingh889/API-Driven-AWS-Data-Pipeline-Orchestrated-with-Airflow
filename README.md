@@ -320,7 +320,7 @@ This project showcases a **complete, production-style Airflow-orchestrated data 
 - **Catalog & Query:** AWS Glue Crawler enables serverless SQL analytics via Athena  
 - **Analytics-Ready:** Supports trends, aggregations, and data quality checks  
 - **Scalable & Reusable:** Modular and extensible design  
-- **Portfolio-Ready:** Follows real-world Bronze–Silver–Gold best practices
+
 
 - ![Silver Layer](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/project%20desc.jpg)
 
