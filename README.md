@@ -1,7 +1,9 @@
 # API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow
-![Logo](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/project%20desc.jpg)
-# 📦 API → S3 → AWS Glue → Athena  
-## End-to-End Data Engineering Project
+
+![Project Overview](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/project%20desc.jpg)
+
+## 📦 API → S3 → AWS Glue → Athena  
+### End-to-End Data Engineering Project
 
 ---
 
@@ -11,7 +13,7 @@ This project demonstrates a **production-style end-to-end data engineering pipel
 
 The pipeline ingests **e-commerce order data from a public REST API**, stores it in an **S3-based data lake**, processes it through **Bronze → Silver → Gold layers**, and exposes an **analytics-ready dataset** for SQL-based reporting.
 
-The design closely follows **real-world cloud data engineering best practices**, including immutable raw storage, distributed ETL, workflow orchestration, and schema-driven analytics.
+The design follows **real-world cloud data engineering best practices**, including immutable raw storage, distributed ETL, workflow orchestration, and schema-driven analytics.
 
 **Data Source:**  
 https://fakestoreapi.com/carts
@@ -32,6 +34,7 @@ https://fakestoreapi.com/carts
 ## 🔁 End-to-End Workflow
 
 ### 1️⃣ API Ingestion – Bronze Layer
+
 - Airflow triggers a Python ingestion task
 - Raw JSON data is fetched from the external API
 - Data is stored **immutably** in Amazon S3
@@ -41,9 +44,14 @@ https://fakestoreapi.com/carts
 **Purpose:**  
 Preserve raw data exactly as received for replayability and auditing.
 
+**Bronze Layer (Raw Data):**
+
+![Bronze Layer](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/bronzelayer.png)
+
 ---
 
 ### 2️⃣ Raw → Silver Transformation
+
 - AWS Glue reads raw JSON data from S3
 - Schema is inferred and normalized
 - Data is converted to **Parquet format**
@@ -52,9 +60,14 @@ Preserve raw data exactly as received for replayability and auditing.
 **Purpose:**  
 Improve performance, enforce structure, and optimize storage.
 
+**Silver Layer:**
+
+![Silver Layer](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/sliver.png)
+
 ---
 
 ### 3️⃣ Silver → Gold Transformation
+
 - AWS Glue transforms Silver data into an analytics-ready fact table
 - Nested product arrays are exploded
 - Data is normalized to **order-line level**
@@ -64,9 +77,14 @@ Improve performance, enforce structure, and optimize storage.
 **Purpose:**  
 Create business-consumable datasets for reporting and analytics.
 
+**Gold Layer:**
+
+![Gold Layer](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/goldlayer.png)
+
 ---
 
 ### 4️⃣ Metadata Management
+
 - AWS Glue Crawler scans the Gold zone
 - Table schema is registered in the Glue Data Catalog
 - Athena automatically detects the table
@@ -74,20 +92,30 @@ Create business-consumable datasets for reporting and analytics.
 **Purpose:**  
 Enable SQL analytics without manual schema management.
 
+**AWS Glue Crawler:**
+
+![Glue Crawler](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/crawler.png)
+
 ---
 
 ### 5️⃣ Analytics & Querying
-- Amazon Athena is used to query the Gold table
+
+- Amazon Athena queries the Gold table
 - Supports aggregations, trends, and data quality checks
 - Partition pruning improves query performance
 - No infrastructure provisioning required
+
+**Amazon Athena Queries:**
+
+![Athena Query 1](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/p2.png)
+![Athena Query 2](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/p1.png)
 
 ---
 
 ## 🧰 Technology Stack
 
 | Layer | Technology |
-|-----|-----------|
+|------|-----------|
 | Orchestration | Apache Airflow (Local, Docker) |
 | Storage | Amazon S3 |
 | ETL | AWS Glue (PySpark) |
@@ -101,7 +129,7 @@ Enable SQL analytics without manual schema management.
 
 ## 🐍 boto3 Usage (AWS SDK for Python)
 
-**boto3** is used to programmatically interact with AWS services within the pipeline.
+**boto3** is used to programmatically interact with AWS services.
 
 ### Where boto3 is used
 - Upload raw API data to Amazon S3
@@ -137,7 +165,18 @@ The **AWS Command Line Interface (CLI)** is used during development and operatio
 
 ## ⏱️ Apache Airflow (Local, Dockerized)
 
-Apache Airflow is deployed **locally using Docker containers**, simulating a production orchestration environment.
+Apache Airflow is deployed **locally using Docker**, simulating a production orchestration environment.
+
+![Airflow Details](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/airflow%20details.png)
+![Airflow Status](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/airflowstatus.png)
+
+**Airflow Graph View:**
+
+![Airflow Graph](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/airflow%20graph.png)
+
+**Airflow Gantt Chart:**
+
+![Airflow Gantt](https://github.com/rohitsingh889/API-Driven-AWS-Data-Pipeline-Orchestrated-with-Airflow/blob/main/Pics/airflow%20gantt%20chart.png)
 
 ### Airflow responsibilities
 - Schedule the pipeline (daily)
@@ -203,4 +242,3 @@ The Gold table supports:
 
 **Rohit**  
 Data Engineer
-
