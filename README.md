@@ -43,7 +43,7 @@ https://fakestoreapi.com/
 - No transformations are applied at this stage
 
 **Purpose:**  
-Preserve raw data exactly as received for replayability and auditing.
+Preserve raw data exactly as received 
 
 **Bronze Layer (Raw Data):**
 
