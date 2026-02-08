@@ -24,35 +24,34 @@ with DAG(
     tags=["api", "s3", "glue", "ingestion"],
 ) as dag:
 
-    # -----------------------------
+   
     # Task 1: API → S3 (raw zone)
-    # -----------------------------
+    
     ingest_task = PythonOperator(
         task_id="ingest_orders_api_to_s3",
         python_callable=ingest_orders_to_s3,
     )
 
-    # -----------------------------
     # Task 2: Glue raw → parquet (silver)
-    # -----------------------------
+   
     raw_to_parquet = PythonOperator(
         task_id="run_glue_raw_to_parquet",
         python_callable=run_glue_job,
-        op_args=["orders_raw_to_parquet"],  # ✅ matches Glue job
+        op_args=["orders_raw_to_parquet"],  
     )
 
-    # -----------------------------
+   
     # Task 3: Glue parquet → gold
-    # -----------------------------
+    
     silver_to_gold = PythonOperator(
         task_id="run_glue_silver_to_gold",
         python_callable=run_glue_job,
         op_args=["orders_silver_to_gold"],
     )
 
-    # -----------------------------
+    
     # Task 4: Run Glue crawler on gold
-    # -----------------------------
+    
     def run_gold_crawler():
         glue = boto3.client("glue", region_name="us-east-1")
         glue.start_crawler(Name="gold_crawler")
@@ -62,7 +61,8 @@ with DAG(
         python_callable=run_gold_crawler,
     )
 
-    # -----------------------------
-    # Dependencies
-    # -----------------------------
+    
+    # Dependencies.....
+    
     ingest_task >> raw_to_parquet >> silver_to_gold >> gold_crawler
+
